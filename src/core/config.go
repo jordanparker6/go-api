@@ -25,6 +25,7 @@ type DatabaseConfig struct {
 	Uri     string
 }
 
+// getEnv returns the env or a default
 func getEnv(key, fallback string) string {
 	if value, ok := os.LookupEnv(key); ok {
 		return value
@@ -32,6 +33,7 @@ func getEnv(key, fallback string) string {
 	return fallback
 }
 
+// Config is public configuration object.
 var Config = settings{
 	Api: ApiConfig{
 		Name:    getEnv("API_NAME", "go-api"),

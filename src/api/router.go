@@ -2,21 +2,29 @@ package api
 
 import (
 	"fmt"
-	"net/http"
+
+	"github.com/jordanparker6/go-api/src/api/controller"
+	"github.com/jordanparker6/go-api/src/services"
 
 	"github.com/gin-gonic/gin"
 )
 
-var router *gin.Engine = gin.Default()
-var api *gin.RouterGroup = router.Group("v1")
-
-func Build() {
-	api.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"message": "hello world"})
-	})
-}
-
-func Run(host string, port string) {
-	Build()
+// Run
+// builds the router, attaches enpoints and runs the server.
+func Run(host string, port string, depends *services.Container) {
+	router := gin.Default()
+	api := router.Group("/api/v1")
+	c := controller.NewController(depends)
+	{
+		users := api.Group("/user")
+		{
+			users.GET(":id", c.GetUser)
+			users.POST("create", c.CreateUser)
+			users.DELETE(":id", c.DeleteUser)
+		}
+		api.GET("/docs", c.GetReDocs)
+		api.GET("/openapi.json", c.GetOpenAPI)
+		api.GET("/test", c.Test)
+	}
 	router.Run(fmt.Sprintf("%s:%s", host, port))
 }

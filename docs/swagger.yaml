@@ -1,0 +1,217 @@
+basePath: /api/v1
+definitions:
+  controller.CreateUserSchema:
+    properties:
+      first_name:
+        type: string
+      last_name:
+        type: string
+    type: object
+  core.HTTPError:
+    properties:
+      code:
+        example: 400
+        type: integer
+      message:
+        example: status bad request
+        type: string
+    type: object
+  core.HTTPSuccess:
+    properties:
+      code:
+        example: 200
+        type: integer
+      message:
+        example: request completed
+        type: string
+    type: object
+  models.User:
+    properties:
+      first_name:
+        type: string
+      id:
+        type: string
+      last_name:
+        type: string
+    type: object
+host: localhost:8000
+info:
+  contact:
+    email: jordanhparker6@gmail.com
+    name: Jordan Parker
+    url: https://github.com/jordanparker6/go-api
+  description: This is boilerplate Golang REST API. Please feel free to contribute
+    to this boilerplate.
+  license:
+    name: MIT Licence
+    url: https://github.com/jordanparker6/go-api/LICENSE
+  termsOfService: https://github.com/jordanparker6/go-api/LICENSE
+  title: Golang Example API
+  version: "1.0"
+paths:
+  /openapi.json:
+    get:
+      description: Fetches the OpenAPI json specification for the API.
+      operationId: open-api
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/core.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/core.HTTPError'
+      summary: OpenAPI
+      tags:
+      - Core
+  /test:
+    get:
+      description: An endpoint to test the API's connectivity.
+      operationId: test-api
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/core.HTTPSuccess'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/core.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/core.HTTPError'
+      summary: Test API
+      tags:
+      - Core
+  /user/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a user record by user ID.
+      operationId: delete-user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/core.HTTPSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/core.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/core.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/core.HTTPError'
+      security:
+      - BasicAuth: []
+      summary: DeleteUser
+      tags:
+      - User
+    get:
+      consumes:
+      - application/json
+      description: Gets a user by user ID.
+      operationId: get-user-by-id
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/core.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/core.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/core.HTTPError'
+      security:
+      - BasicAuth: []
+      summary: GetUser
+      tags:
+      - User
+  /user/create:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new user record.
+      operationId: create-user
+      parameters:
+      - description: User ID
+        in: body
+        name: id
+        required: true
+        schema:
+          $ref: '#/definitions/controller.CreateUserSchema'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/core.HTTPSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/core.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/core.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/core.HTTPError'
+      security:
+      - BasicAuth: []
+      summary: CreateUser
+      tags:
+      - User
+schemes:
+- http
+- https
+securityDefinitions:
+  AccessToken:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
+tags:
+- description: Core API enpoints for documentation and health checks.
+  name: Core
+- description: User API endpoints for CRUD operations on user records.
+  name: User
+x-extension-openapi:
+  example: value on a json format
